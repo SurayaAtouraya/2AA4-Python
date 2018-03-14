@@ -1,0 +1,203 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{paralist}
+\usepackage{listings}
+\usepackage{booktabs}
+
+\oddsidemargin 0mm
+\evensidemargin 0mm
+\textwidth 160mm
+\textheight 200mm
+
+\pagestyle{plain}
+\pagenumbering{arabic}
+
+\newcounter{stepnum}
+
+\title{Assignment 1 Report}
+\author{Ninos Yomo | yomon}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+Introductory blurb.
+
+\section{Testing of the Original Program}
+
+For my approach to testing, I decided that I would give multiple test inputs for
+each method contained in my modules. The first test input would be a straight
+forward acceptable input that the program is expected to work with. My second
+round of input would usually be an odd choice for an input where, the program
+wouldn't nessecarly crash, but who's output could be unpredictable. Finally, the
+last input would be one that is expected to break and crash the program, just to
+see if the program could at least survive the input and pass some sort of message.
+After completely testing my modules, I found that it passed the basic requirements
+expected for each method, except for quadval which was found to be a little to
+unaccurate. It was expected to calculate the value within a 10 percent margin of
+error but failed. However, the criterion for passing was subjectively defined and
+can not be used to definitvely come to a conculsion on the correctness of the 
+implementation.
+
+\section{Results of Testing Partner's Code}
+
+The program failed at the very first test. It was able to create the object from
+the SeqT class however, I was unable to print the content of the internal sequence
+since we did not name the state variable the same due to the ambiguity of the 
+program specification. When manually changing the testing software to account
+for the different naming convention, the program managed to pass all of the 
+basic tests but failed once more at the odd inputs since it was programed to 
+handle it differently from mine, again this was due to the lack of clarity
+in the specification. Once more, it failed when needing to reference another state
+variable since, again, the specification did not explicity mention what to put
+leading to different state variable names and thus causing the errors.
+
+\section{Discussion of Test Results}
+
+\subsection{Problems with Original Code}
+With my original code, the only problem seemed ro be that quadVal was a little 
+too unaccurate for my subjectively defined test of + or - 10 percent as the
+error margin. My program was also not robust for bad inputs.
+
+\subsection{Problems with Partner's Code}
+The program was to robust, since the test file was not accounting for robust
+programs, it failed in some bad input tests. Aside from that, the state variable
+names were all different leading to the test file not being able to originally work 
+when referencing its state variables.
+\subsection{Problems with Assignment Specification}
+The specification was just too vauge, it did not explicitly state important details
+that were required to know so that the program and test files would run properly for
+all students' codes. For example, the state variables were not explicitly named, this
+lead to students naming whatever they wanted and when we tested each other, we were
+very likely to get errors due to the different names, in my case, I called my sequence
+"sequence" and my partner names his "data". Another problem was that the specification 
+did not define if the program needed to be robust or not. Because of this, some students
+took the initiative to make theirs robust, my partner did however, my test file
+did not account for this and gave fails to certain tests where he handled the input 
+differently. Also, for quadVal, since it relied on three points, it failed to mention
+precisely what points to use, which lead to assumptions.
+\section{Answers}
+
+\begin{enumerate}
+
+\item For each of the methods in each of the classes, please classify it as a
+  constructor, accessor or mutator.
+
+Table on next page.
+\begin{table}[h]
+	\begin{tabular}{lr}
+		\toprule
+		Method & Type\\
+		\midrule
+		SeqT & Constructor\\
+		add & Mutator\\
+		rm & Mutator\\
+		set & Mutator\\
+		get & Accessor\\
+		size & Accessor\\
+		indexInSeq & Accessor\\
+		CurveT & Constructor\\
+		linval & Accessor\\
+		quadVal & Accessor\\
+		npolyVal & Accessor\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\item What are the advantages and disadvantages of using an external library
+  like \texttt{numpy}?
+
+An advantage of using external libraries is that it can minimize the amount of 
+code in your module, since external libraries simplify what you have to write,
+there will be less clutter in your code which makes it easier to read. Another 
+advantage is that it enables you to do things with your program that you might
+not have been able to do on your own. This will lead to more productivity for the
+user, since they can focus on other aspects of their code. A disadvantage in using external libraries
+is that the documentation for it may not be very good. This makes it very hard
+for programmers to learn how to use it in their program, making it useless to 
+them in some cases. Another disadvantage is that it can create a lot of overhead
+of the code being used is not optimized for preformance and memory efficency, if
+the programmer needs their program to preform optimally then the external library
+will be hurting them more then helping.
+
+\item The \texttt{SeqT} class overlaps with the functionality provided by
+  Python's in-built list type.  What are the differences between \texttt{SeqT}
+  and Python's list type?  What benefits does Python's list type provide over
+  the \texttt{SeqT} class?
+
+One difference is the way of creating a list. For the SeqT, an object from that
+class must be explicitly created whereas for the built in type, simply naming a 
+list followed by equating it to "[]" will do. Although they preform essentially 
+the same methods, the names given to them and the way they are implemented are 
+different. To call the sequence in SeqT, the state variable within the object has
+to be explicitly stated while for the built in type only the list name has to 
+be called. The advantage of using the built in type is because it is easier to
+work with and it is much more portable then the SeqT type as well as being more
+optimal in preformance and memory efficency.
+
+\item What complications would be added to your code if the assumption that
+  $x_i < x_{i+1}$ no longer applied?
+
+Then implementation of multiple methods would have to change since they rely on the
+fact that the sequence is initially in order, because of this they will no longer
+work. What could be done to fix this is that in the constructor, it sorts the data
+so that the sequence is in order, with that implementation the methods would not
+have to be changed.
+
+\item Will \texttt{linVal(x)} equal \texttt{npolyVal(n, x)} for the same \texttt{x}
+  value?  Why or why not?
+
+No, because npolyVal is a very accurate estimation that requires the input of the rank
+of the polynomial whereas linVal is a simple estimator. They also use two different 
+methods of estimation, linVal uses interpolation and npolyVal uses regression, this will
+make it even more unlikely that they will have the same value. Finally, the values being
+used are real numbers, this leads to decimal numbers which makes it even more unlikely that
+they match up perfectly.
+\end{enumerate}
+
+\newpage
+
+\lstset{language=Python, basicstyle=\tiny, breaklines=true, showspaces=false,
+  showstringspaces=false, breakatwhitespace=true}
+\lstset{language=C,linewidth=.94\textwidth,xleftmargin=1.1cm}
+
+\def\thesection{\Alph{section}} 
+
+\section{Code for SeqADT.py}
+
+\noindent \lstinputlisting{../src/SeqADT.py}
+
+\newpage
+
+\section{Code for CurveADT.py}
+
+\noindent \lstinputlisting{../src/CurveADT.py}
+
+\newpage
+
+\section{Code for testSeqs.py}
+
+\noindent \lstinputlisting{../src/testSeqs.py}
+
+\newpage
+
+\section{Code for Partner's SeqADT.py}
+
+\noindent \lstinputlisting{../partner/SeqADT.py}
+
+\newpage
+
+\section{Code for Partner's CurveADT.py}
+
+\noindent \lstinputlisting{../partner/CurveADT.py}
+
+\newpage
+
+\section{Makefile}
+
+\lstset{language=make}
+\noindent \lstinputlisting{../Makefile}
+
+\end{document}
