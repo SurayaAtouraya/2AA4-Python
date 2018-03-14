@@ -1,0 +1,215 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{paralist}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+
+\oddsidemargin 0mm
+\evensidemargin 0mm
+\textwidth 160mm
+\textheight 200mm
+
+\pagestyle {plain}
+\pagenumbering{arabic}
+
+\newcounter{stepnum}
+
+\title{Assignment 2 Report}
+\author{Ninos Yomo | yomon}
+\date{\today}
+
+\begin {document}
+
+\maketitle
+
+\section{Testing of the Original Program}
+
+My approach to testing was simple and systematic. I would test each individual module,
+and from each module, I would test the functionality of its methods. For each method,
+if applicable, I would test a general case, a boundary case and an exception case. The
+testing of boundary cases was a rational decision as I was able to uncover that my
+index() function from SeqServices.py was not fully correct as it would fail on the 
+boundary case. The exception cases were required to confirm that the module was correctly
+raising errors when expected. Other than my boundary case for index(), the functionality 
+of my other methods were correct.
+
+\section{Results of Testing Partner's Code}
+
+The SeqServices passed all cases. Although my test module raised an error for index(),
+my partner's implementation was correct.$\\$$\\$
+
+The CurveADT passed in all cases except for eval() because of the different implementation
+of the local function, where my test module assumes scipy was used and implements a scipy
+method that would crash for different implementations.$\\$$\\$
+
+The getC method in Data does not work for indexs of 0 since my partner defined it to be
+out of bounds even though indexing starts at 0 and the specification defined it in bounds.
+The eval method for Data did not work as the calculation did not output a value. Finally,
+the slice method did not work for the same reason eval in CurveADT did not work, the 
+different implementation of the local function f caused .take(0) to raise an error.
+
+\section{Discussion of Test Results}
+
+\subsection{Problems with Original Code}
+
+With my program, my exceptions were done differently then what most people would do.
+Instead of raising an exception while passing a string message, I would raise the exception
+and have the exceptions class come with a preset message. This would prove to be 
+incompatible with my partner's code as they would attempt to pass a string message.$\\$$\\$
+My implementation for index() in SeqServices was incorrect for the right boundary case since
+it returns an index of the last element when it should be the index of the element before it
+to maintain the definition of the specification.
+
+\subsection{Problems with Partner's Code}
+
+At first, the test module would not work because of the way SeqServices.py was implemented
+by my partner. A class was made where the methods were defined to be static, which treated
+the SeqServices as an abstract object while I defined it to simply be a module of usable 
+methods. The requirements specification did not explicitly say if it was to be an abstract
+object or not. However from context, it is implied that it is not a abstract object. $\\$$\\$
+
+Another problem was the inconsistency of the import statements. I used methods
+from imports by calling from x import *, whereas my partner would import specifically what was 
+needed, because of this, the way those methods are called are different and the test module
+would crash. $\\$$\\$
+
+My partner incorrectly implemented getC from Data by treating the 0 index as out of bounds
+even though the requirements specification defined it to be in bounds.
+
+\subsection{Problems with Assignment Specification}
+The assignment specification gave too much freedom when it came to the implementation of the 
+local function f in CurveADT. We could have implemented it using scipy or SeqServices. However,
+for the scipy implementation, the function .take(0) was used to convert the returned array into
+a single value, this would work for all scipy implementations however, those who chose to implement 
+using SeqServices as did my partner would find that the test would fail. $\\$$\\$
+
+The specification did not define a consistent way to import the modules used in other modules.
+Because of this, we used different ways of importing module that effected the way we wrote our
+code and thus raised errors during testing because of the inconsistency.$\\$$\\$
+
+Aside from these slight differences, the formality of the requirements specification of A2 compared
+to A1 greatly improved the overall ability to implement the program. With it, many ambiguous details
+were covered which allowed for consistent implementations. An example is the use of discrete math
+notation to describe the functionality of methods, this allows for no misinterpretation, unlike the
+previous assignment who's ambiguous description caused inconsistency in implementations.
+\section{Answers}
+
+\begin{enumerate}
+
+\item What is the mathematical specification of the \texttt{SeqServices} access
+  program isInBounds(X, x) if the assumption that X is ascending is removed?
+
+If the assumption that the sequence is ascending was removed, this would mean the
+current mathematical specification of: $X_0 \leq x \leq X_{|X|-1}$ would be incorrect.
+The new specification must explicitly state the minimum and maximum values of the 
+sequence instead of relying on the positional application of the ascending property.
+This would be: $min(X) \leq x \leq max(X)$ where min and max represent the minimum
+and maximum values of the sequence X respectively. An alternative way using no 
+functions would be to say: $\exists x:\mathbb{R} \bullet (\neg(\forall y:\mathbb{R}|y \in S \bullet x<y)\land \neg(\forall z:\mathbb{R}|z \in S \bullet x>z))$
+for the input argument x and the sequence S. If this is true, that means that the argument
+x is not less than all of the elements in the sequence which means it is greater than 
+at least one element, this proves that it is within the lower bounds. The second half
+states that it is not greater than all the elements meaning it is less than at least
+one element and therefore proves it is within the upper bounds. Since it is within
+both boundaries, it must be within the sequence.
+
+\item How would you modify \texttt{CurveADT.py} to support cubic interpolation?
+
+To implement cubic interpolation, this would require that CurveADT.py has its 
+$MAX\_ORDER$ value become 3 instead of 2 to allow for cubic functions to be inputted. This
+would be the only requirement since the rest will be handled by scipy.interp1d()
+because of the fact that it supports cubic interpolations. 
+
+\item What is your critique of the CurveADT module's interface.  In particular,
+  comment on whether the exported access programs provide an interface that is
+  consistent, essential, general, minimal and opaque.
+
+ Firstly, the interface is certainly essential as no existing method's functionality
+ can be recreated with another in the same module. It is also minimal since all of
+ the methods in CurveADT strictly perform only their sole intended task. However, 
+ the boundaries could have been better defined as some methods may not work for them
+ like solving for the differentials on the boundary points since it requires you to
+ evaluate for a point out of bounds.
+
+\item What is your critique of the Data abstract object's interface.  In
+  particular, comment on whether the exported access programs provide an
+  interface that is consistent, essential, general, minimal and opaque.
+
+ The most obvious critique of Data is the lack of a method that deletes a
+ curve from Data. It is known that Data has a very limited capacity of 10 
+ curves, because of this, it would be useful for the module to implement a 
+ deletion method to make room for new curves. Another detail is the lack of 
+ a getter method for the size of Data. Without it, checking for the Full() 
+ exception is made awkward as it is done by manually examining the length
+ of Data, while a simpler size() function can help clean up the code and check
+ for the Full() exception ahead of time.
+
+\end{enumerate}
+
+\newpage
+
+\lstset{language=Python, basicstyle=\tiny, breaklines=true, showspaces=false,
+  showstringspaces=false, breakatwhitespace=true}
+
+\def\thesection{\Alph{section}}
+
+\section{Code for CurveADT.py}
+
+\noindent \lstinputlisting{../src/CurveADT.py}
+
+\newpage
+
+\section{Code for Data.py}
+
+\noindent \lstinputlisting{../src/Data.py}
+
+\newpage
+
+\section{Code for SeqServices.py}
+
+\noindent \lstinputlisting{../src/SeqServices.py}
+
+\newpage
+
+\section{Code for Plot.py}
+
+\noindent \lstinputlisting{../src/Plot.py}
+
+\newpage
+
+\section{Code for Load.py}
+
+\noindent \lstinputlisting{../src/Load.py}
+
+\newpage
+
+\section{Code for Partner's CurveADT.py}
+
+% Uncomment the line below when partner files have been pushed to your repo
+%\noindent \lstinputlisting{../partner/CurveADT.py}
+
+\newpage
+
+\section{Code for Partner's Data.py}
+
+% Uncomment the line below when partner files have been pushed to your repo
+%\noindent \lstinputlisting{../partner/Data.py}
+
+\newpage
+
+\section{Code for Partner's SeqServices.py}
+
+% Uncomment the line below when partner files have been pushed to your repo
+%\noindent \lstinputlisting{../partner/SeqServices.py}
+
+\newpage
+
+\section{Makefile}
+
+\lstset{language=make}
+\noindent \lstinputlisting{../Makefile}
+
+\end {document}
+\grid
